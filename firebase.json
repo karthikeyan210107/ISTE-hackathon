@@ -1,5 +1,1 @@
-{
-  "hosting": {
-    "public": "build/web"
-  }
-}
+{"hosting":{"public":"build/web"},"flutter":{"platforms":{"android":{"default":{"projectId":"fire-management-iste","appId":"1:187157161217:android:130316ca94729b19696700","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"fire-management-iste","configurations":{"android":"1:187157161217:android:130316ca94729b19696700","ios":"1:187157161217:ios:656f4be0d0611527696700","macos":"1:187157161217:ios:656f4be0d0611527696700","web":"1:187157161217:web:d0a1cb32b909012f696700","windows":"1:187157161217:web:b599e7bc8868a768696700"}}}}}}

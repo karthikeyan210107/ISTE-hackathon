@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "187157161217",
+    "firebase_url": "https://fire-management-iste-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "fire-management-iste",
+    "storage_bucket": "fire-management-iste.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:187157161217:android:130316ca94729b19696700",
+        "android_client_info": {
+          "package_name": "com.example.fire_management"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEFjrrSnDr0bHfNOb_AMxmw98DDt4FwPg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
