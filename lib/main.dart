@@ -4,13 +4,7 @@ import 'package:flutter/material.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  try {
-    await Firebase.initializeApp();
-  } catch (_) {
-    // Firebase can be unavailable in test or offline environments.
-  }
-
+  await Firebase.initializeApp();
   runApp(const FireSafetyApp());
 }
 
@@ -38,93 +32,62 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  DatabaseReference? ref;
-
-  String status = 'Checking...';
-  int gas = 0;
-  int flame = 0;
+  int testValue = 0;
+  bool connected = false;
 
   @override
   void initState() {
     super.initState();
-    _attachRealtimeListener();
-  }
 
-  void _attachRealtimeListener() {
-    try {
-      if (Firebase.apps.isNotEmpty) {
-        ref = FirebaseDatabase.instance.ref('fireSystem');
-        ref?.onValue.listen((event) {
-          final value = event.snapshot.value;
-          if (value is Map) {
-            final data = Map<String, dynamic>.from(value);
-            if (!mounted) return;
+    FirebaseDatabase.instance.ref('test/value').onValue.listen((event) {
+      final value = event.snapshot.value;
 
-            setState(() {
-              gas = (data['gas'] as num?)?.toInt() ?? 0;
-              flame = (data['flame'] as num?)?.toInt() ?? 0;
-              status = (data['fire'] as bool? ?? false)
-                  ? '🔥 FIRE ALERT'
-                  : '✅ SAFE';
-            });
-          }
+      if (value != null) {
+        setState(() {
+          testValue = int.tryParse(value.toString()) ?? 0;
+          connected = true;
         });
       }
-    } catch (_) {
-      ref = null;
-    }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('🔥 Smart Fire Safety'),
+        title: const Text('🔥 Fire Safety System'),
       ),
-      body: _buildContent(),
-    );
-  }
-
-  Widget _buildContent() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            status,
-            style: const TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 30),
-          Card(
-            elevation: 5,
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  Text(
-                    'Gas Sensor: $gas',
-                    style: const TextStyle(fontSize: 22),
-                  ),
-                  const SizedBox(height: 15),
-                  Text(
-                    'Flame Sensor: $flame',
-                    style: const TextStyle(fontSize: 22),
-                  ),
-                ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              connected ? 'Firebase Connected' : 'Connecting...',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
               ),
             ),
-          ),
-          const SizedBox(height: 30),
-          ElevatedButton(
-            onPressed: () {
-              // Future: emergency actions
-            },
-            child: const Text('Emergency Response'),
-          ),
-        ],
+            const SizedBox(height: 40),
+            const Text(
+              'ESP32 Test Value',
+              style: TextStyle(fontSize: 24),
+            ),
+            const SizedBox(height: 15),
+            Text(
+              '$testValue',
+              style: const TextStyle(
+                fontSize: 60,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Updates every 5 seconds',
+              style: TextStyle(fontSize: 16),
+            ),
+          ],
+        ),
       ),
     );
   }
